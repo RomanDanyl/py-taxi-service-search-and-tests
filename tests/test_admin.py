@@ -18,16 +18,25 @@ class AdminSiteTests(TestCase):
             password="testdriver",
             license_number="AAA12345"
         )
-        self.manufacturer = Manufacturer.objects.create(name="Toyota", country="Japan")
-        self.car1 = Car.objects.create(model="Corolla", manufacturer=self.manufacturer)
-        self.car2 = Car.objects.create(model="Camry", manufacturer=self.manufacturer)
+        self.manufacturer = Manufacturer.objects.create(
+            name="Toyota",
+            country="Japan"
+        )
+        self.car1 = Car.objects.create(
+            model="Corolla",
+            manufacturer=self.manufacturer
+        )
+        self.car2 = Car.objects.create(
+            model="Camry",
+            manufacturer=self.manufacturer
+        )
         self.car1.drivers.set([self.driver])
         self.car2.drivers.set([self.driver])
 
-
     def test_driver_license_listed(self):
         """
-        Test that a driver's license number is in list_display on driver admin page
+        Test that a driver's license number is in
+        list_display on driver admin page
         :return:
         """
         url = reverse("admin:taxi_driver_changelist")
@@ -45,7 +54,8 @@ class AdminSiteTests(TestCase):
 
     def test_add_fieldsets(self):
         """
-        Test that a driver's license number are displayed in the add_fieldsets on the add driver admin page.
+        Test that a driver's license number are displayed
+        in the add_fieldsets on the add driver admin page.
         """
         url = reverse("admin:taxi_driver_add")
         res = self.client.get(url)
@@ -65,6 +75,11 @@ class AdminSiteTests(TestCase):
         Test that the list filter works correctly on the car admin page.
         """
         url = reverse("admin:taxi_car_changelist")
-        response = self.client.get(url, {"manufacturer__id__exact": self.manufacturer.id})
+        response = (
+            self.client.get(
+                url,
+                {"manufacturer__id__exact": self.manufacturer.id}
+            )
+        )
         self.assertContains(response, self.car1.model)
         self.assertContains(response, self.car2.model)
